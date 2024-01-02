@@ -1,0 +1,61 @@
+---
+
+- name: APT | Install dependencies
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+    dpkg_options: 'force-confnew,force-confdef'
+    autoclean: true
+    autoremove: true
+    update_cache: true
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - gnupg
+    - software-properties-common
+
+- name: Add maxmind ppa
+  ansible.builtin.apt_repository:
+    repo: ppa:maxmind/ppa
+
+- name: Install geoip databases
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+    dpkg_options: 'force-confnew,force-confdef'
+    autoclean: true
+    autoremove: true
+    update_cache: true
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - geoipupdate
+    - geoip-bin
+
+- name: Add GeoIP.conf
+  ansible.builtin.template:
+    src: GeoIP.conf
+    dest: /etc/GeoIP.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Run geoipupdate
+  ansible.builtin.shell: geoipupdate
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when: maxmind_geoipupdate_run
+
+- name: Creates a cronjob for geoipupdate
+  ansible.builtin.cron:
+    name: geoipupdate
+    weekday: "6,4"
+    minute: "34"
+    hour: "12"
+    user: root
+    job: "/usr/bin/geoipupdate"
+    cron_file: geoipupdate
+  when: maxmind_geoipupdate_cron
+
+...

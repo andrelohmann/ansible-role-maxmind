@@ -1,0 +1,34 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+
+  - name: Run geoipupdate
+    ansible.builtin.shell: /usr/bin/geoipupdate --version
+    register: geoipupdate_status
+
+  - name: Dump geoipupdate_status
+    ansible.builtin.debug:
+      var: geoipupdate_status
+
+  - name: Assert geoipupdate includes geoipupdate
+    ansible.builtin.assert:
+      that: geoipupdate_status.stderr is search('geoipupdate')
+
+  - name: Assert geoipupdate includes ubuntu-ppa
+    ansible.builtin.assert:
+      that: geoipupdate_status.stderr is search('ubuntu-ppa')
+
+  - name: Check for cronfile
+    ansible.builtin.stat:
+      path: '/etc/cron.d/geoipupdate'
+    register: cron_file
+
+  - name: Assert cron_file exists
+    ansible.builtin.assert:
+      that: cron_file.stat.exists
+
+...
