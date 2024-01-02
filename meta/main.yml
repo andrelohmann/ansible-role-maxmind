@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  role_name: maxmind
+  author: andrelohmann
+  description: ansible galaxy role to install maxmind geoip database
+  company: CloudCourse GmbH
+
+  license: MIT
+
+  min_ansible_version: "2.11"
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - jammy
+
+  galaxy_tags:
+  - maxmind
+
+dependencies: []
+...

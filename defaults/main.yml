@@ -1,0 +1,5 @@
+---
+maxmind_geoipupdate_run: true
+maxmind_geoipupdate_cron: true
+maxmind_edition_ids: GeoLite2-ASN GeoLite2-City GeoLite2-Country
+...
