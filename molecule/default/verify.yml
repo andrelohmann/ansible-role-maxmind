@@ -7,8 +7,9 @@
   tasks:
 
   - name: Run geoipupdate
-    ansible.builtin.shell: /usr/bin/geoipupdate --version
+    ansible.builtin.command: /usr/bin/geoipupdate --version
     register: geoipupdate_status
+    changed_when: false
 
   - name: Dump geoipupdate_status
     ansible.builtin.debug:

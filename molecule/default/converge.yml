@@ -2,14 +2,14 @@
 - name: Converge
   hosts: all
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   vars:
     maxmind_account_id: __ACCOUNT_ID__
     maxmind_license_key: __LICENSE_KEY__
     maxmind_edition_ids: GeoLite2-ASN GeoLite2-City GeoLite2-Country
     maxmind_geoipupdate_run: false
   tasks:
-  - name: "Include andrelohmann.maxmind"
-    include_role:
+  - name: Include andrelohmann.maxmind
+    ansible.builtin.include_role:
       name: "andrelohmann.maxmind"
 ...
